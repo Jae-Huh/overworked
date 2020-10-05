@@ -1,2 +1,2 @@
 # Overworked
-Simple time tracker
+A simple time tracker
