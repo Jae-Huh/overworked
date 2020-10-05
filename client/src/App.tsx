@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+
 import './App.css';
 
 function App() {
+  const [startTime, setStartTime] = useState<number>();
+  const [finishTime, setFinishTime] = useState<number>();
+  const [timer, setTimer] = useState<number>(0);
+
+  useEffect(() => {
+    if (!startTime) return;
+
+    let intervalId: number;
+    if (!finishTime) {
+      intervalId = window.setInterval(() => {
+        setTimer((time)=> time + 1);
+      }, 1000)
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    }
+  }, [startTime, finishTime]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={() => setStartTime(Date.now())}>Start</button>
+      <button onClick={() => setFinishTime(Date.now())}>Stop</button>
+
+      {startTime && <p>{timer}s</p>}
+      {startTime && finishTime && (
+        <p>Duration:  {finishTime - startTime} milliseconds</p>
+      )}
     </div>
   );
 }
